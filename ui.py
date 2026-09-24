@@ -42,9 +42,16 @@ HIGHLIGHT_COLOR = "#fff3b0"
 GIVEN_COLOR = "#000000"
 SOLVER_COLOR = "#1f5fbf"
 GLYPH_COLOR = "#505050"
+STATUS_COLOR = "#333333"
 DIGIT_FONT = ("Helvetica", 32)
 GIVEN_FONT = ("Helvetica", 32, "bold")
 GLYPH_FONT = ("Helvetica", 18, "bold")
+
+
+def format_time(seconds: float) -> str:
+    if seconds < 1:
+        return f"Time: {seconds * 1000:.3f} ms"
+    return f"Time: {seconds:.3f} s"
 
 
 def load_solver(path: Path) -> Callable:
@@ -110,7 +117,7 @@ class FutoshikiApp(tk.Frame):
         self.canvas = tk.Canvas(self, bg=BG_COLOR, highlightthickness=0)
         self.canvas.pack(padx=10, pady=(5, 0))
         self.status_var = tk.StringVar(value="")
-        tk.Label(self, textvariable=self.status_var, bg=BG_COLOR, anchor="center").pack(
+        tk.Label(self, textvariable=self.status_var, bg=BG_COLOR, fg=STATUS_COLOR, anchor="center").pack(
             fill="x", padx=10, pady=(4, 10)
         )
         self._draw_placeholder()
@@ -140,7 +147,7 @@ class FutoshikiApp(tk.Frame):
         self.solve_button = ttk.Button(bar, text="Solve", command=self._solve_or_stop, state="disabled")
         self.solve_button.pack(side="left")
 
-        self.timer_var = tk.StringVar(value="Time: 0.000 s")
+        self.timer_var = tk.StringVar(value=format_time(0))
         ttk.Label(bar, textvariable=self.timer_var, width=16, font=("Menlo", 12)).pack(
             side="left", padx=(12, 0)
         )
@@ -239,7 +246,7 @@ class FutoshikiApp(tk.Frame):
         self.puzzle = puzzle
         self.file_var.set(Path(path).name)
         self._draw_board()
-        self.timer_var.set("Time: 0.000 s")
+        self.timer_var.set(format_time(0))
         self.status_var.set(f"{puzzle.size}×{puzzle.size} puzzle · {len(puzzle.givens)} givens · "
                             f"{len(puzzle.inequalities)} inequalities")
         self.solve_button.configure(state="normal")
@@ -285,7 +292,7 @@ class FutoshikiApp(tk.Frame):
             return
         self._sync_board(run.live_grid, run.last_cell)
         if run.thread.is_alive():
-            self.timer_var.set(f"Time: {time.perf_counter() - run.start:.3f} s")
+            self.timer_var.set(format_time(time.perf_counter() - run.start))
             self.status_var.set(f"{self.algorithm_var.get()} · solving… · steps: {run.steps:,}")
             self.after(POLL_MS, self._poll)
         else:
@@ -294,7 +301,7 @@ class FutoshikiApp(tk.Frame):
     def _finish(self, run: SolveRun) -> None:
         self.active_run = None
         self._set_running(False)
-        self.timer_var.set(f"Time: {run.elapsed:.3f} s")
+        self.timer_var.set(format_time(run.elapsed))
         algorithm = self.algorithm_var.get()
         steps = f"steps: {run.steps:,}"
 
