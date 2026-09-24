@@ -1,0 +1,25 @@
+# 6x6 Futoshiki - UNSOLVABLE (correctly formatted)
+# 6 givens, 11 inequalities; givens do not clash directly,
+# but no assignment satisfies every constraint.
+# Basic backtracking proves it with 23,210 assignments, 23,210 backtracks.
+SIZE
+6
+GIVENS
+1,2,2
+3,2,4
+4,1,6
+4,5,1
+6,1,3
+6,4,5
+INEQUALITIES
+1,3,>,1,4
+3,5,>,3,6
+5,2,>,5,3
+6,5,<,6,6
+1,4,>,2,4
+2,1,>,3,1
+3,4,>,4,4
+4,3,<,5,3
+4,6,>,5,6
+5,2,<,6,2
+5,6,>,6,6

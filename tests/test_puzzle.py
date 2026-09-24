@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from puzzle import Puzzle, PuzzleFormatError, load_puzzle, parse_puzzle  # noqa: E402
 
-SAMPLE = Path(__file__).resolve().parent / "sample-ques.txt"
+SAMPLE = Path(__file__).resolve().parent / "8x8-easy.txt"
 
 
 class SampleFileTest(unittest.TestCase):

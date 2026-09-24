@@ -25,8 +25,19 @@ class PuzzleFormatError(ValueError):
     """Raised when a puzzle file cannot be parsed."""
 
 
+DEFAULT_TIMEOUT = 60.0  # seconds
+
+
 class SolveCancelled(Exception):
     """Raised from a solver's on_step callback when the user stops the solve."""
+
+
+class SolveTimeout(Exception):
+    """Raised by a solver when it runs past its time-out."""
+
+    def __init__(self, timeout: float):
+        super().__init__(f"timed out after {timeout:g} s")
+        self.timeout = timeout
 
 
 @dataclass
@@ -79,8 +90,12 @@ class Puzzle:
 
 
 def load_puzzle(path: str) -> Puzzle:
-    with open(path, encoding="utf-8") as f:
-        return parse_puzzle(f.read())
+    try:
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+    except UnicodeDecodeError:
+        raise PuzzleFormatError("not a UTF-8 text file") from None
+    return parse_puzzle(text)
 
 
 def parse_puzzle(text: str) -> Puzzle:
