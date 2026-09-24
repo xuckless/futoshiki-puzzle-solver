@@ -21,6 +21,7 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from typing import Callable, Dict, Optional
 
+import results
 from puzzle import (DEFAULT_TIMEOUT, Cell, Grid, Puzzle, PuzzleFormatError, SolveCancelled,
                     SolveTimeout, load_puzzle)
 
@@ -114,6 +115,7 @@ class FutoshikiApp(tk.Frame):
         super().__init__(master, bg=BG_COLOR)
         self.solvers: Dict[str, Path] = dict(SOLVERS)
         self.puzzle: Optional[Puzzle] = None
+        self.puzzle_path: Optional[Path] = None
         self.displayed: Grid = []
         self.cell_rects: Dict[Cell, int] = {}
         self.cell_texts: Dict[Cell, int] = {}
@@ -261,9 +263,12 @@ class FutoshikiApp(tk.Frame):
         try:
             puzzle = load_puzzle(path)
         except (OSError, PuzzleFormatError) as e:
+            if isinstance(e, PuzzleFormatError):
+                self._record_result(Path(path), {"Status": "Wrong format"})
             messagebox.showerror("Could not load puzzle", f"{Path(path).name}: {e}", parent=self)
             return False
         self.puzzle = puzzle
+        self.puzzle_path = Path(path)
         self.file_var.set(Path(path).name)
         self._draw_board()
         self.timer_var.set(format_time(0))
@@ -333,24 +338,44 @@ class FutoshikiApp(tk.Frame):
         self.timer_var.set(format_time(run.elapsed))
         algorithm = self.algorithm_var.get()
 
+        status = None  # results.csv Status; None = not a result worth recording
         if isinstance(run.error, NotImplementedError):
             outcome = "not implemented yet"
         elif isinstance(run.error, SolveCancelled):
             outcome = "stopped"
         elif isinstance(run.error, SolveTimeout):
-            outcome = str(run.error)
+            outcome, status = str(run.error), "Timed out"
         elif run.error is not None:
             print(run.error_trace, end="")
-            outcome = f"error: {type(run.error).__name__}: {run.error}"
+            outcome, status = f"error: {type(run.error).__name__}: {run.error}", "Error"
         elif run.result is None:
-            outcome = "no solution"
+            outcome, status = "no solution", "Unsolvable"
         elif self.puzzle.is_solution(run.result):
             self._sync_board(run.result, None)
-            outcome = "solved ✓"
+            outcome, status = "solved ✓", "Solved"
         else:
-            outcome = "invalid solution returned ✗"
+            outcome, status = "invalid solution returned ✗", "Invalid solution"
         self._set_highlight(None)
+        if status is not None:
+            outcome += self._record_result(self.puzzle_path, {
+                "N": self.puzzle.size,
+                "Solver": algorithm,
+                "Status": status,
+                "Time s": f"{run.elapsed:.6f}",
+                "Nodes visited": run.assignments,
+                "Assignments": run.assignments,
+                "Backtracks": run.backtracks,
+            })
         self.status_var.set(f"{algorithm} · {outcome} · {self._counts(run)}")
+
+    def _record_result(self, path: Path, fields: Dict) -> str:
+        """Write one results.csv row for `path`; return '' or a short note if the write failed."""
+        try:
+            results.record({"Puzzle": path.name, "Difficulty": results.difficulty_of(path), **fields})
+        except (OSError, ValueError) as e:
+            print(f"could not write {results.RESULTS_PATH.name}: {e}")
+            return f" (not saved to {results.RESULTS_PATH.name})"
+        return ""
 
     @staticmethod
     def _counts(run: SolveRun) -> str:
