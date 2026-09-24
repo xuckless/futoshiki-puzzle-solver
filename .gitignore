@@ -4,3 +4,4 @@ tests/test_fixtures.py
 tests/test_puzzle.py
 tests/test_results.py
 tests/test_ac3.py
+tests/__pycache__/
