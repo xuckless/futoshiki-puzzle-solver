@@ -10,6 +10,7 @@ File format (rows/columns are 1-indexed):
     1,2,<,1,3        cell(1,2) < cell(1,3)
 
 Internally everything is 0-indexed.
+Generated using Claude
 """
 
 from __future__ import annotations

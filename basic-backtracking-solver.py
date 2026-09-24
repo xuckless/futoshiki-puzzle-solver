@@ -6,6 +6,11 @@ ascending order. A value is committed only if it is consistent with every row,
 column, fixed-value and inequality constraint whose other cells already hold a
 value; otherwise the next value is tried, and when none fit the solver
 backtracks immediately.
+
+
+AI Disclousure: The algorithm was bounded to the display using help of Claude Code
+and refactoring job was left to AI agent. Verified by implementing correct
+solutions and read real articles. Code read and verified by me.
 """
 
 from __future__ import annotations
