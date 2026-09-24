@@ -14,14 +14,14 @@ COLUMNS = ["Puzzle", "N", "Difficulty", "Solver", "Status", "Time s", "Nodes vis
            "Backtracks"]
 KEY = ("Puzzle", "Solver")
 
-DIFFICULTIES = ("easy", "medium", "hard")
+DIFFICULTIES = ("trivial", "easy", "medium", "tricky", "hard", "extreme")
 _HEADER_RE = re.compile(r"^\s*#.*\bdifficulty:\s*(\w+)", re.IGNORECASE)
 
 Row = Dict[str, Union[str, int, float]]
 
 
 def difficulty_of(path: Union[str, Path]) -> str:
-    """The '# ... difficulty: X' comment in the file, else easy/medium/hard from the filename, else ''."""
+    """The '# ... difficulty: X' comment in the file, else a DIFFICULTIES word in the filename, else ''."""
     path = Path(path)
     try:
         with open(path, encoding="utf-8", errors="replace") as f:

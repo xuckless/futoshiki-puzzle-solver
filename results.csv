@@ -1,1 +1,25 @@
 Puzzle,N,Difficulty,Solver,Status,Time s,Nodes visited,Assignments,Backtracks
+8x8-trivial.txt,8,trivial,Basic Backtracking,Solved,0.050200,30982,30982,30943
+8x8-easy.txt,8,easy,Basic Backtracking,Timed out,60.001776,47281483,47281483,47281444
+6x6-trivial.txt,6,trivial,Basic Backtracking,Solved,0.001651,532,532,508
+6x6-easy.txt,6,easy,Basic Backtracking,Solved,0.160308,128939,128939,128907
+6x6-tricky.txt,6,tricky,Basic Backtracking,Solved,0.082053,60040,60040,60004
+6x6-extreme.txt,6,extreme,Basic Backtracking,Solved,0.181210,143169,143169,143136
+4x4-trivial.txt,4,trivial,Basic Backtracking,Solved,0.000221,13,13,2
+4x4-easy.txt,4,easy,Basic Backtracking,Solved,0.000589,123,123,108
+4x4-tricky.txt,4,tricky,Basic Backtracking,Solved,0.000559,173,173,159
+4x4-extreme.txt,4,extreme,Basic Backtracking,Solved,0.000392,40,40,26
+unsolvable-6x6.txt,6,,Basic Backtracking,Unsolvable,0.037645,23210,23210,23210
+malformed-4x4.txt,,,,Wrong format,,,,
+8x8-trivial.txt,8,trivial,AC-3 Enhanced,Solved,0.009425,40,40,1
+8x8-easy.txt,8,easy,AC-3 Enhanced,Solved,0.038494,124,124,65
+8x8-tricky.txt,8,tricky,AC-3 Enhanced,Solved,0.024808,83,83,24
+8x8-extreme.txt,8,extreme,AC-3 Enhanced,Solved,0.020962,94,94,39
+6x6-trivial.txt,6,trivial,AC-3 Enhanced,Solved,0.004786,24,24,0
+6x6-easy.txt,6,easy,AC-3 Enhanced,Solved,0.007505,32,32,0
+6x6-tricky.txt,6,tricky,AC-3 Enhanced,Solved,0.014669,65,65,29
+6x6-extreme.txt,6,extreme,AC-3 Enhanced,Solved,0.010483,47,47,14
+4x4-trivial.txt,4,trivial,AC-3 Enhanced,Solved,0.001492,11,11,0
+4x4-easy.txt,4,easy,AC-3 Enhanced,Solved,0.002042,15,15,0
+4x4-tricky.txt,4,tricky,AC-3 Enhanced,Solved,0.002839,14,14,0
+4x4-extreme.txt,4,extreme,AC-3 Enhanced,Solved,0.001540,14,14,0
